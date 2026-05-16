@@ -60,25 +60,34 @@ Download prebuilt binaries from the [raylib releases page](https://github.com/ra
 ### Linux / macOS
 
 ```bash
-g++ main.cpp -o lorenz -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+g++ main.cpp slider.cpp lorenz.cpp draw.cpp -o lorenz -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 ```
 
 Or with clang:
 
 ```bash
-clang++ main.cpp -o lorenz -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+clang++ main.cpp slider.cpp lorenz.cpp draw.cpp -o lorenz -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 ```
 
 ### macOS (framework-style)
 
 ```bash
-clang++ main.cpp -o lorenz -framework OpenGL -framework Cocoa -framework IOKit -lraylib
+clang++ main.cpp slider.cpp lorenz.cpp draw.cpp -o lorenz -framework OpenGL -framework Cocoa -framework IOKit -lraylib
 ```
 
 ### Windows (MinGW)
 
 ```bash
-g++ main.cpp -o lorenz.exe -lraylib -lopengl32 -lgdi32 -lwinmm
+g++ main.cpp slider.cpp lorenz.cpp draw.cpp -o lorenz.exe -lraylib -lopengl32 -lgdi32 -lwinmm
+```
+
+### Using Make (recommended)
+
+A `Makefile` is included for convenience:
+
+```bash
+make        # build
+make clean  # remove binary
 ```
 
 Then run:
@@ -117,9 +126,18 @@ The classic chaotic attractor appears at the default values (σ=10, ρ=28, β=8/
 ## Project Structure
 
 ```
-.
-└── main.cpp      # All source code: simulation, rendering, UI sliders
+lorenz/
+├── main.cpp        # Entry point, camera setup, main loop
+├── slider.h        # Slider struct declaration and function signatures
+├── slider.cpp      # Slider draw and update logic
+├── lorenz.h        # lorenz() function declaration
+├── lorenz.cpp      # Lorenz ODE integration
+├── draw.h          # drawBox() declaration
+├── draw.cpp        # 3D bounding box rendering
+└── Makefile        # Build automation
 ```
+
+Each module is self-contained: `.h` files declare the interface, `.cpp` files contain the implementation. Include only what you need in each file.
 
 ---
 
