@@ -1,10 +1,6 @@
 # Lorenz Attractor Visualizer
 
-A real-time 3D visualization of the Lorenz attractor built with C++ and [raylib](https://www.raylib.com/). Explore the famous chaotic system interactively by tweaking its parameters live with on-screen sliders.
-
-![Lorenz Attractor](https://upload.wikimedia.org/wikipedia/commons/1/13/A_Trajectory_Through_Phase_Space_in_a_Lorenz_Attractor.gif)
-
----
+## A real-time 3D visualization of the Lorenz attractor built with C++ and [raylib](https://www.raylib.com/). Explore the famous chaotic system interactively by tweaking its parameters live with on-screen sliders.
 
 ## What is the Lorenz Attractor?
 
