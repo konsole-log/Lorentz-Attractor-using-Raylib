@@ -1,96 +1,13 @@
 #include <iostream>
 #include <raylib.h>
-#include <vector>
-#include <math.h>
 #include <raymath.h>
+#include <vector>
+#include "slider.h"
+#include "lorenz.h"
+#include "draw.h"
 using namespace std;
-
 const int screenWidth = 1200;
 const int screenHeight = 900;
-struct Slider
-{
-    float x, y;
-    float width, height;
-    float minVal, maxVal;
-    float currentVal;
-    bool isDragging;
-};
-
-float map(float value, float inMin, float inMax, float outMin, float outMax)
-{
-    if (inMax - inMin == 0)
-        return outMin;
-    return (value - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
-}
-
-void drawSlider(Slider s, const char *label)
-{
-    float handleX = map(s.currentVal, s.minVal, s.maxVal, s.x, s.x + s.width);
-    float handleRadius = 8.0f;
-    DrawRectangle(s.x, s.y, s.width, s.height, DARKGRAY);
-    DrawRectangle(s.x, s.y, handleX - s.x, s.height, WHITE);
-    DrawCircle(handleX, s.y + s.height / 2, handleRadius, WHITE);
-    DrawText(label, s.x, s.y - 20, 20, WHITE);
-    DrawText(TextFormat("%.2f", s.currentVal), s.x + s.width + 10, s.y - 5, 20, WHITE);
-}
-void updateSlider(Slider &s)
-{
-    Vector2 mouse = GetMousePosition();
-    float trackLeft = s.x;
-    float trackRight = s.x + s.width;
-    float trackCenterY = s.y + s.height / 2;
-
-    bool mouseInRange = (mouse.x >= trackLeft - 5 &&
-                         mouse.x <= trackRight + 5 &&
-                         mouse.y >= trackCenterY - 10 && mouse.y <= trackCenterY + 10);
-    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && (mouseInRange || s.isDragging))
-    {
-        s.isDragging = true;
-        s.currentVal = map(mouse.x, trackLeft, trackRight, s.minVal, s.maxVal);
-        s.currentVal = Clamp(s.currentVal, s.minVal, s.maxVal);
-    }
-    if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
-    {
-        s.isDragging = false;
-    }
-}
-void drawBox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ)
-{
-    // Bottom face
-    DrawLine3D({minX, minY, minZ}, {maxX, minY, minZ}, GRAY);
-    DrawLine3D({maxX, minY, minZ}, {maxX, minY, maxZ}, GRAY);
-    DrawLine3D({maxX, minY, maxZ}, {minX, minY, maxZ}, GRAY);
-    DrawLine3D({minX, minY, maxZ}, {minX, minY, minZ}, GRAY);
-
-    // Top face
-    DrawLine3D({minX, maxY, minZ}, {maxX, maxY, minZ}, GRAY);
-    DrawLine3D({maxX, maxY, minZ}, {maxX, maxY, maxZ}, GRAY);
-    DrawLine3D({maxX, maxY, maxZ}, {minX, maxY, maxZ}, GRAY);
-    DrawLine3D({minX, maxY, maxZ}, {minX, maxY, minZ}, GRAY);
-
-    // Vertical edges
-    DrawLine3D({minX, minY, minZ}, {minX, maxY, minZ}, GRAY);
-    DrawLine3D({maxX, minY, minZ}, {maxX, maxY, minZ}, GRAY);
-    DrawLine3D({maxX, minY, maxZ}, {maxX, maxY, maxZ}, GRAY);
-    DrawLine3D({minX, minY, maxZ}, {minX, maxY, maxZ}, GRAY);
-
-    DrawLine3D({0, minY, 0}, {0, maxY, 0}, GRAY);
-    DrawLine3D({minX, 0, 0}, {maxX, 0, 0}, GRAY);
-    DrawLine3D({0, 0, minZ}, {0, 0, maxZ}, GRAY);
-}
-Vector3 lorenz(float &x, float &y, float &z, float rho, float beta, float sigma, float dt)
-{
-    float dxdt = sigma * (y - x);
-    float dydt = x * (rho - z) - y;
-    float dzdt = x * y - beta * z;
-
-    x += dxdt * dt;
-    y += dydt * dt;
-    z += dzdt * dt;
-
-    Vector3 point = {x, z - 25.0f, y};
-    return point;
-}
 int main()
 {
 
